@@ -1,0 +1,10 @@
+db_url: "sqlite:///database.db"
+discord_webhook_url: ""
+dayly_limit: 1000
+
+token:
+  abuseipdb: "fake token" # remove key to disable
+
+# list of ip to check
+ip_to_check:
+  - 8.8.8.8

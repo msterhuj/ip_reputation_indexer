@@ -6,6 +6,10 @@ authors = ["msterhuj <gabin.lanore@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+requests = "^2.31.0"
+PyYAML = "^6.0"
+rich = "^13.3.5"
+sqlmodel = "^0.0.8"
 
 [tool.poetry.dev-dependencies]
 
