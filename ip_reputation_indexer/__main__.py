@@ -32,7 +32,6 @@ print(f"Wait time: {wait_time} seconds")
 
 engine = create_engine(config.get("db_url"), echo=False)
 SQLModel.metadata.create_all(engine)
-session = Session(engine)
 alerts = []
 
 def send_discord_alert(fields: list):
@@ -51,7 +50,7 @@ def send_discord_alert(fields: list):
     })
     print(response.status_code)
 
-def check_abuseipdb(ip: str) -> Optional[Reputation]:
+def check_abuseipdb(ip: str, session) -> Optional[Reputation]:
     response = requests.request(method='GET', url='https://api.abuseipdb.com/api/v2/check', headers={
         'Accept': 'application/json',
         'Key': token
@@ -67,8 +66,9 @@ def check_abuseipdb(ip: str) -> Optional[Reputation]:
         return reputation
 
 while True:
+    session = Session(engine)
     for ip in config.get('ip_to_check', []):
-        reputation = check_abuseipdb(ip)
+        reputation = check_abuseipdb(ip, session)
         if reputation and reputation.abuse_score > 0:
             alerts.append({
                 "name": reputation.ip,
@@ -80,5 +80,6 @@ while True:
 
     session.commit()
     session.close()
+    
     print(f"Sleeping for {wait_time} seconds")
     sleep(wait_time)
